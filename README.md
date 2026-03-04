@@ -5,6 +5,7 @@
 监控 3 个 OpenClaw Agent（前端工程师、后端工程师、总工程师）的工作状态，通过 GitHub 提交代码、Issue 和 PR，前端展示工作进度面板。
 
 ### 核心功能
+- 实时展示 **3 个 Agent** 的工作状态
 - 实时展示各 Agent 工作进度
 - GitHub Issue/PR 状态同步
 - 项目整体进度看板
