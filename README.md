@@ -11,13 +11,36 @@
 - 项目整体进度看板
 - 内网可直接访问
 
-### Agent 状态获取（后端实现）
+---
+
+## 技术选型
+
+### 前端
+- Vue 3 + TypeScript
+- Vite (构建工具)
+- pnpm (包管理器)
+- TailwindCSS (UI 框架)
+
+### 后端
+- PHP 8 + Laravel 11
+- MySQL 8.0
+
+### 部署
+- LNMP 架构 (Linux + Nginx + MySQL + PHP)
+- 无需 Docker
+
+### 认证
+- 内网项目，无需登录注册，直接访问 Dashboard
+
+---
+
+## 后端 API 设计
+
+### Agent 状态获取
 - 通过 OpenClaw `sessions_list` API 获取 Agent 会话信息
 - 从 `updatedAt` 字段判断最后活跃时间（如 5 分钟内 = 在线）
 - 从 `model` 字段获取当前使用模型
-- 通过 GitHub 提交/PR 记录获取工作 activity
 
-### 后端 API 设计
 ```php
 // 获取 Agent 状态
 GET /api/agents/status
@@ -43,32 +66,16 @@ GET /api/agents/status
 }
 ```
 
----
-
-## 技术选型
-
-### 前端
-- Vue 3 + TypeScript
-- Vite (构建工具)
-- pnpm (包管理器)
-- TailwindCSS (UI 框架)
-
-### 后端
-- PHP 8 + Laravel 11
-
-### 部署
-- LNMP 架构 (Linux + Nginx + MySQL + PHP)
-- 无需 Docker
-
-### 任务管理
-- GitHub Issue (纯 GitHub 管理，无需本地数据库)
-
-### 认证
-- 内网项目，无需登录注册，直接访问 Dashboard
+### GitHub 集成
+- 通过 GitHub Issue 管理任务（无需本地数据库）
+- 通过 GitHub 提交/PR 记录获取工作 activity
 
 ---
 
 ## 目录
 
-- `frontend/` - 前端项目
-- `backend/` - 后端项目
+```
+agent-monitor-system/
+├── frontend/     # 前端项目 (Vue 3)
+└── backend/      # 后端项目 (PHP 8 + Laravel 11)
+```
