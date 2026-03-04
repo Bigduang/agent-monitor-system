@@ -2,12 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GitHubController;
+use App\Http\Controllers\AgentController;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+// Agent 状态
+Route::get('/agents/status', [AgentController::class, 'status']);
+
+// GitHub 集成
 
 Route::prefix('github')->group(function () {
     // 获取仓库信息
