@@ -23,11 +23,10 @@
 
 ### 后端
 - PHP 8 + Laravel 11
-- MySQL 8.0
 
 ### 部署
-- LNMP 架构 (Linux + Nginx + MySQL + PHP)
-- 无需 Docker
+- LNMP 架构 (Linux + Nginx + PHP)
+- 无需 MySQL、无需 Docker
 
 ### 认证
 - 内网项目，无需登录注册，直接访问 Dashboard
