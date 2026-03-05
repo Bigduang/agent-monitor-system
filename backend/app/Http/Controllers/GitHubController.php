@@ -109,4 +109,22 @@ class GitHubController extends Controller
         
         return response()->json($result['data']);
     }
+    
+    /**
+     * 兼容路由：获取默认仓库的 Issue 列表
+     * GET /api/github/issues
+     */
+    public function getIssuesCompat(string $state = 'open'): JsonResponse
+    {
+        return $this->getIssues('Bigduang', 'agent-monitor-system', $state);
+    }
+    
+    /**
+     * 兼容路由：获取默认仓库的 PR 列表
+     * GET /api/github/pulls
+     */
+    public function getPullsCompat(string $state = 'open'): JsonResponse
+    {
+        return $this->getPulls('Bigduang', 'agent-monitor-system', $state);
+    }
 }
