@@ -4,7 +4,7 @@
   --cyber-primary: #00f0ff;
   --cyber-secondary: #ff00ff;
   --cyber-bg: #0a0a0f;
-  --cyber-card-bg: rgba(10, 10, 20, 0.8);
+  --cyber-card-bg: rgba(0, 0, 0, 0.5);
   --cyber-border: rgba(0, 240, 255, 0.3);
   --cyber-glow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
