@@ -49,7 +49,8 @@ class AgentController extends Controller
                 $model = 'offline';
                 
                 if (File::exists($sessionsFile)) {
-                    $content = File::get($sessionsFile);
+                    // 使用 shell_exec 读取文件，解决 sessions.json 权限为 600 导致 PHP-FPM 无法读取的问题
+                    $content = shell_exec('cat ' . $sessionsFile);
                     $sessions = json_decode($content, true);
                     
                     if ($sessions && is_array($sessions)) {
