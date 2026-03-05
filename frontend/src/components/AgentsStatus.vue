@@ -7,6 +7,9 @@ const agents = ref<Agent[]>([])
 const loading = ref(true)
 const error = ref<string | null>(null)
 
+// 缓存每个 Agent 的最后活跃时间
+const lastActiveCache = ref<Record<string, number>>({})
+
 // 定时刷新间隔（毫秒）
 const REFRESH_INTERVAL = 30000 // 30秒
 let timer: ReturnType<typeof setInterval> | null = null
@@ -16,6 +19,14 @@ async function loadAgentsStatus() {
     loading.value = true
     error.value = null
     const data = await fetchAgentsStatus()
+    
+    // 更新缓存
+    for (const agent of data.agents) {
+      if (agent.lastActive) {
+        lastActiveCache.value[agent.id] = agent.lastActive
+      }
+    }
+    
     agents.value = data.agents
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load agents status'
@@ -25,8 +36,12 @@ async function loadAgentsStatus() {
   }
 }
 
-function formatLastActive(timestamp: number): string {
-  const date = new Date(timestamp)
+function formatLastActive(timestamp: number | null, agentId: string): string {
+  // 如果当前时间为空，使用缓存的时间
+  const time = timestamp || lastActiveCache.value[agentId]
+  if (!time) return '-'
+  
+  const date = new Date(time)
   return date.toLocaleTimeString('zh-CN', {
     hour: '2-digit',
     minute: '2-digit',
@@ -78,7 +93,7 @@ onUnmounted(() => {
         <div class="text-sm text-gray-600">
           <p>ID: {{ agent.id }}</p>
           <p>模型: {{ agent.model }}</p>
-          <p>最后活跃: {{ formatLastActive(agent.lastActive) }}</p>
+          <p>最后活跃: {{ formatLastActive(agent.lastActive, agent.id) }}</p>
         </div>
       </div>
     </div>
