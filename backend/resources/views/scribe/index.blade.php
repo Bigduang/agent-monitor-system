@@ -186,19 +186,19 @@ access-control-allow-origin: *
             &quot;id&quot;: &quot;frontend001&quot;,
             &quot;name&quot;: &quot;宫下玲奈&quot;,
             &quot;role&quot;: &quot;前端工程师&quot;,
-            &quot;model&quot;: &quot;unknown&quot;,
-            &quot;lastActive&quot;: 1772678104840,
+            &quot;model&quot;: &quot;MiniMax-M2.5&quot;,
+            &quot;lastActive&quot;: 1772678346518,
             &quot;isOnline&quot;: true,
-            &quot;updatedAt&quot;: 1772678104840
+            &quot;updatedAt&quot;: 1772678346518
         },
         {
             &quot;id&quot;: &quot;backend001&quot;,
             &quot;name&quot;: &quot;田中柠檬&quot;,
             &quot;role&quot;: &quot;后端工程师&quot;,
             &quot;model&quot;: &quot;unknown&quot;,
-            &quot;lastActive&quot;: 1772678003182,
+            &quot;lastActive&quot;: 1772678513034,
             &quot;isOnline&quot;: true,
-            &quot;updatedAt&quot;: 1772678003182
+            &quot;updatedAt&quot;: 1772678513034
         },
         {
             &quot;id&quot;: &quot;chief001&quot;,
@@ -1249,7 +1249,7 @@ access-control-allow-origin: *
 
 <code class="language-json" style="max-height: 300px;">{
     &quot;status&quot;: &quot;ok&quot;,
-    &quot;timestamp&quot;: &quot;2026-03-05T02:37:30+00:00&quot;
+    &quot;timestamp&quot;: &quot;2026-03-05T02:42:36+00:00&quot;
 }</code>
  </pre>
     </span>

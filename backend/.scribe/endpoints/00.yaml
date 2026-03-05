@@ -32,7 +32,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"agents":[{"id":"frontend001","name":"\u5bab\u4e0b\u73b2\u5948","role":"\u524d\u7aef\u5de5\u7a0b\u5e08","model":"unknown","lastActive":1772678104840,"isOnline":true,"updatedAt":1772678104840},{"id":"backend001","name":"\u7530\u4e2d\u67e0\u6aac","role":"\u540e\u7aef\u5de5\u7a0b\u5e08","model":"unknown","lastActive":1772678003182,"isOnline":true,"updatedAt":1772678003182},{"id":"chief001","name":"\u603b\u5de5\u7a0b\u5e08","role":"\u603b\u5de5\u7a0b\u5e08","model":"offline","lastActive":null,"isOnline":false,"updatedAt":null}]}'
+        content: '{"agents":[{"id":"frontend001","name":"\u5bab\u4e0b\u73b2\u5948","role":"\u524d\u7aef\u5de5\u7a0b\u5e08","model":"MiniMax-M2.5","lastActive":1772678346518,"isOnline":true,"updatedAt":1772678346518},{"id":"backend001","name":"\u7530\u4e2d\u67e0\u6aac","role":"\u540e\u7aef\u5de5\u7a0b\u5e08","model":"unknown","lastActive":1772678513034,"isOnline":true,"updatedAt":1772678513034},{"id":"chief001","name":"\u603b\u5de5\u7a0b\u5e08","role":"\u603b\u5de5\u7a0b\u5e08","model":"offline","lastActive":null,"isOnline":false,"updatedAt":null}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -459,7 +459,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"status":"ok","timestamp":"2026-03-05T02:37:30+00:00"}'
+        content: '{"status":"ok","timestamp":"2026-03-05T02:42:36+00:00"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
