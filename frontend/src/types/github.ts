@@ -1,47 +1,80 @@
-// GitHub Issue 和 PR 相关类型
+// GitHub 类型定义
+
+export interface GitHubRepo {
+  id: number
+  name: string
+  full_name: string
+  description: string | null
+  html_url: string
+  stargazers_count: number
+  forks_count: number
+  open_issues_count: number
+  language: string | null
+  created_at: string
+  updated_at: string
+}
 
 export interface GitHubIssue {
   id: number
   number: number
   title: string
-  state: 'open' | 'closed'
+  body: string | null
+  state: string
   html_url: string
-  created_at: string
-  updated_at: string
   user: {
     login: string
     avatar_url: string
   }
-  labels: Array<{
-    name: string
-    color: string
-  }>
-  comments: number
+  created_at: string
+  updated_at: string
+  closed_at: string | null
 }
 
 export interface GitHubPullRequest {
   id: number
   number: number
   title: string
-  state: 'open' | 'closed' | 'merged'
+  body: string | null
+  state: string
   html_url: string
-  created_at: string
-  updated_at: string
   user: {
     login: string
     avatar_url: string
   }
-  labels: Array<{
-    name: string
-    color: string
-  }>
-  merged: boolean
+  created_at: string
+  updated_at: string
+  merged_at: string | null
+  head: {
+    ref: string
+    sha: string
+  }
+  base: {
+    ref: string
+    sha: string
+  }
 }
 
-export interface GitHubIssuesResponse {
-  issues: GitHubIssue[]
+export interface GitHubCommit {
+  sha: string
+  commit: {
+    message: string
+    author: {
+      name: string
+      date: string
+    }
+  }
+  author: {
+    login: string
+    avatar_url: string
+  } | null
+  html_url: string
 }
 
-export interface GitHubPullsResponse {
-  pulls: GitHubPullRequest[]
+export interface GitHubBranch {
+  name: string
+  commit: {
+    sha: string
+    url: string
+  }
+  protected: boolean
 }
