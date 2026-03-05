@@ -78,8 +78,8 @@ onUnmounted(() => {
       <div 
         v-for="agent in agents" 
         :key="agent.id"
-        class="border rounded-lg p-4 shadow-sm"
-        :class="agent.isOnline ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-gray-50'"
+        class="cyber-card p-4"
+        :class="agent.isOnline ? 'border-green-500' : 'border-gray-500'"
       >
         <div class="flex items-center justify-between mb-2">
           <span class="font-semibold">{{ agent.name }}</span>

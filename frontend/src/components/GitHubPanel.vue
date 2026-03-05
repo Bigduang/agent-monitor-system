@@ -60,7 +60,7 @@ onMounted(() => {
     
     <div v-else class="space-y-6">
       <!-- Issues Section -->
-      <div class="bg-white rounded-lg shadow p-4">
+      <div class="cyber-card p-4">
         <h3 class="text-lg font-semibold mb-3">📋 Issues ({{ issues.length }})</h3>
         <div v-if="issues.length === 0" class="text-gray-500 text-sm">
           暂无 Issues
@@ -82,7 +82,7 @@ onMounted(() => {
       </div>
       
       <!-- Pull Requests Section -->
-      <div class="bg-white rounded-lg shadow p-4">
+      <div class="cyber-card p-4">
         <h3 class="text-lg font-semibold mb-3">🔀 Pull Requests ({{ pullRequests.length }})</h3>
         <div v-if="pullRequests.length === 0" class="text-gray-500 text-sm">
           暂无 Pull Requests
