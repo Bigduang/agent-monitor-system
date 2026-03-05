@@ -58,9 +58,9 @@ class AgentController extends Controller
                         $latestSession = null;
                         
                         foreach ($sessions as $key => $session) {
-                            $updatedAt = $session['updatedAt'] ?? $session['updated_at'] ?? 0;
-                            if ($updatedAt > $maxUpdatedAt) {
-                                $maxUpdatedAt = $updatedAt;
+                            $sessionUpdatedAt = $session['updatedAt'] ?? $session['updated_at'] ?? 0;
+                            if ($sessionUpdatedAt > $maxUpdatedAt) {
+                                $maxUpdatedAt = $sessionUpdatedAt;
                                 $latestSession = $session;
                             }
                         }
