@@ -1,7 +1,7 @@
 import type { AgentsStatusResponse } from '../types/agent'
 
 // API 基础 URL - 可以通过环境变量配置
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 /**
  * 获取 Agent 状态列表
