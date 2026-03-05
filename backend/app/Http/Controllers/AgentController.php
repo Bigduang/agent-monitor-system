@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class AgentController extends Controller
 {
@@ -14,18 +16,23 @@ class AgentController extends Controller
     public function status()
     {
         try {
-            // 调用 OpenClaw sessions_list API
-            // 本地部署时使用内部 API
-            $response = Http::timeout(10)->get('http://localhost:3000/api/sessions/list');
-            
-            if (!$response->successful()) {
-                return response()->json([
-                    'error' => 'Failed to fetch agent status',
-                    'message' => $response->body()
-                ], 500);
+            // 调用 OpenClaw gateway status CLI 命令获取会话状态
+            // 使用 shell_exec 确保环境变量正确
+            $openclawPath = '/home/zczd/.nvm/versions/node/v22.22.0/bin/openclaw';
+            $output = shell_exec("$openclawPath gateway call status --json 2>&1");
+
+            if (empty($output)) {
+                throw new \Exception('OpenClaw command returned empty output');
             }
-            
-            $sessions = $response->json();
+
+            $statusData = json_decode($output, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Failed to parse OpenClaw status: ' . json_last_error_msg() . ' - Output: ' . substr($output, 0, 200));
+            }
+
+            // 从 status 数据中提取 sessions.recent
+            $sessions = $statusData['sessions']['recent'] ?? [];
             
             // Agent 映射配置
             $agentMap = [
@@ -49,19 +56,42 @@ class AgentController extends Controller
             $agents = [];
             $onlineThreshold = 5 * 60 * 1000; // 5分钟 = 300000ms
             
-            // 处理 sessions 数据
-            if (isset($sessions['sessions']) && is_array($sessions['sessions'])) {
-                foreach ($sessions['sessions'] as $session) {
-                    $sessionId = $session['sessionId'] ?? $session['id'] ?? null;
-                    
-                    if (!$sessionId || !isset($agentMap[$sessionId])) {
-                        continue;
+            // 处理 sessions 数据 - 新格式使用 agentId 字段
+            foreach ($sessions as $session) {
+                $agentId = $session['agentId'] ?? null;
+                
+                if (!$agentId || !isset($agentMap[$agentId])) {
+                    continue;
+                }
+                
+                $agent = $agentMap[$agentId];
+                $updatedAt = $session['updatedAt'] ?? 0;
+                $now = round(microtime(true) * 1000);
+                
+                // 检查是否已经添加过这个 agent（只保留最新的）
+                $exists = false;
+                foreach ($agents as $existingAgent) {
+                    if ($existingAgent['id'] === $agentId) {
+                        $exists = true;
+                        // 如果新的更活跃，则更新
+                        if ($updatedAt > $existingAgent['updatedAt']) {
+                            $agents = array_filter($agents, fn($a) => $a['id'] !== $agentId);
+                            $agents = array_values($agents);
+                            $agents[] = [
+                                'id' => $agent['id'],
+                                'name' => $agent['name'],
+                                'role' => $agent['role'],
+                                'model' => $session['model'] ?? 'unknown',
+                                'lastActive' => $updatedAt,
+                                'isOnline' => ($now - $updatedAt) < $onlineThreshold,
+                                'updatedAt' => $updatedAt
+                            ];
+                        }
+                        break;
                     }
-                    
-                    $agent = $agentMap[$sessionId];
-                    $updatedAt = $session['updatedAt'] ?? $session['updated_at'] ?? 0;
-                    $now = round(microtime(true) * 1000);
-                    
+                }
+                
+                if (!$exists) {
                     $agents[] = [
                         'id' => $agent['id'],
                         'name' => $agent['name'],
