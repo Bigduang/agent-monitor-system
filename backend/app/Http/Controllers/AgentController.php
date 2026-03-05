@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class AgentController extends Controller
@@ -14,18 +14,8 @@ class AgentController extends Controller
     public function status()
     {
         try {
-            // 调用 OpenClaw sessions_list API
-            // 本地部署时使用内部 API
-            $response = Http::timeout(10)->get('http://localhost:3000/api/sessions/list');
-            
-            if (!$response->successful()) {
-                return response()->json([
-                    'error' => 'Failed to fetch agent status',
-                    'message' => $response->body()
-                ], 500);
-            }
-            
-            $sessions = $response->json();
+            // OpenClaw 数据目录
+            $openClawHome = '/home/zczd/.openclaw';
             
             // Agent 映射配置
             $agentMap = [
@@ -49,52 +39,51 @@ class AgentController extends Controller
             $agents = [];
             $onlineThreshold = 5 * 60 * 1000; // 5分钟 = 300000ms
             
-            // 处理 sessions 数据
-            if (isset($sessions['sessions']) && is_array($sessions['sessions'])) {
-                foreach ($sessions['sessions'] as $session) {
-                    $sessionId = $session['sessionId'] ?? $session['id'] ?? null;
+            // 遍历每个 agent 读取 sessions.json
+            foreach ($agentMap as $agentId => $info) {
+                $sessionsFile = $openClawHome . '/agents/' . $agentId . '/sessions/sessions.json';
+                
+                $isOnline = false;
+                $lastActive = null;
+                $updatedAt = null;
+                $model = 'offline';
+                
+                if (File::exists($sessionsFile)) {
+                    $content = File::get($sessionsFile);
+                    $sessions = json_decode($content, true);
                     
-                    if (!$sessionId || !isset($agentMap[$sessionId])) {
-                        continue;
-                    }
-                    
-                    $agent = $agentMap[$sessionId];
-                    $updatedAt = $session['updatedAt'] ?? $session['updated_at'] ?? 0;
-                    $now = round(microtime(true) * 1000);
-                    
-                    $agents[] = [
-                        'id' => $agent['id'],
-                        'name' => $agent['name'],
-                        'role' => $agent['role'],
-                        'model' => $session['model'] ?? 'unknown',
-                        'lastActive' => $updatedAt,
-                        'isOnline' => ($now - $updatedAt) < $onlineThreshold,
-                        'updatedAt' => $updatedAt
-                    ];
-                }
-            }
-            
-            // 填充未上线的 Agent
-            foreach ($agentMap as $id => $info) {
-                $found = false;
-                foreach ($agents as $agent) {
-                    if ($agent['id'] === $id) {
-                        $found = true;
-                        break;
+                    if ($sessions && is_array($sessions)) {
+                        // 找到最新的 session
+                        $maxUpdatedAt = 0;
+                        $latestSession = null;
+                        
+                        foreach ($sessions as $key => $session) {
+                            $updatedAt = $session['updatedAt'] ?? $session['updated_at'] ?? 0;
+                            if ($updatedAt > $maxUpdatedAt) {
+                                $maxUpdatedAt = $updatedAt;
+                                $latestSession = $session;
+                            }
+                        }
+                        
+                        if ($latestSession) {
+                            $updatedAt = $latestSession['updatedAt'] ?? $latestSession['updated_at'] ?? 0;
+                            $now = round(microtime(true) * 1000);
+                            $isOnline = ($now - $updatedAt) < $onlineThreshold;
+                            $lastActive = $updatedAt;
+                            $model = $latestSession['model'] ?? 'unknown';
+                        }
                     }
                 }
                 
-                if (!$found) {
-                    $agents[] = [
-                        'id' => $info['id'],
-                        'name' => $info['name'],
-                        'role' => $info['role'],
-                        'model' => 'offline',
-                        'lastActive' => null,
-                        'isOnline' => false,
-                        'updatedAt' => null
-                    ];
-                }
+                $agents[] = [
+                    'id' => $info['id'],
+                    'name' => $info['name'],
+                    'role' => $info['role'],
+                    'model' => $model,
+                    'lastActive' => $lastActive,
+                    'isOnline' => $isOnline,
+                    'updatedAt' => $updatedAt
+                ];
             }
             
             return response()->json([
@@ -134,8 +123,7 @@ class AgentController extends Controller
                         'isOnline' => false,
                         'updatedAt' => null
                     ]
-                ],
-                'error' => 'Failed to connect to OpenClaw API'
+                ]
             ], 200);
         }
     }
