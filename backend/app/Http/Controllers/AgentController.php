@@ -29,11 +29,6 @@ class AgentController extends Controller
                     'name' => '田中柠檬',
                     'role' => '后端工程师'
                 ],
-                'chief001' => [
-                    'id' => 'chief001',
-                    'name' => '总工程师',
-                    'role' => '总工程师'
-                ],
                 'manager001' => [
                     'id' => 'manager001',
                     'name' => '武藤彩香',
@@ -115,15 +110,6 @@ class AgentController extends Controller
                         'id' => 'backend001',
                         'name' => '田中柠檬',
                         'role' => '后端工程师',
-                        'model' => 'offline',
-                        'lastActive' => null,
-                        'isOnline' => false,
-                        'updatedAt' => null
-                    ],
-                    [
-                        'id' => 'chief001',
-                        'name' => '总工程师',
-                        'role' => '总工程师',
                         'model' => 'offline',
                         'lastActive' => null,
                         'isOnline' => false,
