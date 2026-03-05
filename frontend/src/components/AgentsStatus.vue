@@ -72,7 +72,7 @@ onUnmounted(() => {
             class="px-2 py-1 text-xs rounded-full"
             :class="agent.isOnline ? 'bg-green-500 text-white' : 'bg-gray-400 text-white'"
           >
-            {{ agent.isOnline ? '🟢 在线' : '⚪ 离线' }}
+            {{ agent.isOnline ? '在线' : '离线' }}
           </span>
         </div>
         <div class="text-sm text-gray-600">
