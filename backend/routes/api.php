@@ -15,6 +15,10 @@ Route::get('/agents/status', [AgentController::class, 'status']);
 
 // GitHub 集成
 
+// 兼容路由：前端调用习惯
+Route::get('/github/issues', [GitHubController::class, 'getIssuesCompat']);
+Route::get('/github/pulls', [GitHubController::class, 'getPullsCompat']);
+
 Route::prefix('github')->group(function () {
     // 获取仓库信息
     Route::get('/repos/{owner}/{repo}', [GitHubController::class, 'getRepo']);
