@@ -78,5 +78,3 @@ agent-monitor-system/
 ├── frontend/     # 前端项目 (Vue 3)
 └── backend/      # 后端项目 (PHP 8 + Laravel 11)
 ```
-
-> 工作流程见 AGENTS.md

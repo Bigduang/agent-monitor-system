@@ -37,8 +37,6 @@ return [
 
     'github' => [
         'token' => env('GITHUB_TOKEN'),
-        'owner' => env('GITHUB_OWNER', 'Bigduang'),
-        'repo' => env('GITHUB_REPO', 'agent-monitor-system'),
     ],
 
 ];
