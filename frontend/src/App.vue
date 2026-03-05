@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AgentsStatus from './components/AgentsStatus.vue'
+import GitHubPanel from './components/GitHubPanel.vue'
 </script>
 
 <template>
@@ -15,6 +16,9 @@ import AgentsStatus from './components/AgentsStatus.vue'
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div class="px-4 py-6 sm:px-0">
         <AgentsStatus />
+        <div class="mt-8">
+          <GitHubPanel />
+        </div>
       </div>
     </main>
   </div>
